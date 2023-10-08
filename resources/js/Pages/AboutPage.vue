@@ -1,5 +1,4 @@
 <script setup>
-import AuthenticatedLayoutVue from '@/Layouts/AuthenticatedLayout.vue';
 import UnauthenticatedLayoutVue from '@/Layouts/UnauthenticatedLayout.vue';
 import PrimaryButton from '@/Components/PrimaryButton.vue';
 import { useForm, Head } from '@inertiajs/vue3';
