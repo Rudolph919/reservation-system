@@ -13,7 +13,7 @@ const showingNavigationDropdown = ref(false);
 <template>
     <div>
         <div class="min-h-screen bg-gray-100">
-            <nav class="bg-emerald-300 shadow">
+            <nav class="bg-emerald-500 shadow">
                 <div class="container flex items-center justify-between h-52">
                     <div class="flex items-center shrink-0">
                         <Link :href="route('home')">
