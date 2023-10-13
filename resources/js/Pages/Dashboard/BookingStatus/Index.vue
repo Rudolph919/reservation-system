@@ -1,0 +1,105 @@
+<script setup>
+import DangerButton from "@/Components/DangerButton.vue";
+import NotificationSuccess from "@/Components/NotificationSuccess.vue";
+import Pagination from "@/Components/Pagination.vue";
+import PrimaryNavLink from "@/Components/PrimaryNavLink.vue";
+import SecondaryButton from "@/Components/SecondaryButton.vue";
+import SecondaryNavLink from "@/Components/SecondaryNavLink.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head, Link, router } from "@inertiajs/vue3";
+
+defineProps({
+    title: {
+        type: String,
+    },
+    data: {
+        type: Object,
+    },
+    success: {
+        type: String,
+    },
+});
+
+const destroy = (id) => {
+    if(confirm("Are you sure you want to delete this booking status?")) {
+        router.delete(route('booking-status.destroy', id), {method: 'delete'})
+        // router.visit(route('booking-status.destroy', id), {method: 'delete'})
+    }
+}
+</script>
+
+<template>
+    <Head :title="title" />
+
+    <AuthenticatedLayout>
+        <div class="flex justify-center">
+            <NotificationSuccess v-if="success" :message="success" />
+        </div>
+
+        <div class="py-8">
+            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+                <div
+                    class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6"
+                >
+                    <div class="flex justify-between pb-4">
+                        <div>
+                            <h2
+                                class="inline-flex items-center justify-center font-semibold text-xl text-gray-800 leading-tight"
+                            >
+                                Booking Status - Index
+                            </h2>
+                        </div>
+                        <div class="">
+                            <PrimaryNavLink
+                                :href="route('booking-status.create')"
+                            >
+                                Create a Booking Status
+                            </PrimaryNavLink>
+                        </div>
+                    </div>
+
+                    <table
+                        class="w-full text-sm text-left text-gray-500 dark:text-gray-400"
+                    >
+                        <thead
+                            class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400"
+                        >
+                            <tr>
+                                <th scope="col" class="px-6 py-3">
+                                    Booking Status
+                                </th>
+                                <th scope="col" class="px-6 py-3">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr
+                                v-for="row in data.data"
+                                :key="row.id"
+                                class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
+                            >
+                                <th
+                                    scope="row"
+                                    class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white"
+                                >
+                                    {{ row.name }}
+                                </th>
+                                <td class="px-6 py-4">
+                                    <SecondaryNavLink
+                                        :href="route('booking-status.edit', row)"
+                                        class="mr-4"
+                                    >
+                                        Edit
+                                    </SecondaryNavLink>
+                                    <DangerButton @click="destroy(row.id)">
+                                        Delete
+                                    </DangerButton>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <Pagination class="mt-6" :links="data.links" />
+                </div>
+            </div>
+        </div>
+    </AuthenticatedLayout>
+</template>
