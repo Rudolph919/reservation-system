@@ -1,11 +1,17 @@
 <?php
 
+use App\Http\Controllers\AvailabilityStatusController;
 use App\Http\Controllers\BookingController;
+use App\Http\Controllers\BookingStatusController;
 use App\Http\Controllers\LandingPageController;
 use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ResourceTypeController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
+
+
 
 /*
 |--------------------------------------------------------------------------
@@ -33,11 +39,20 @@ Route::get('/contact', [LandingPageController::class, 'contact'])->name('contact
 
 
 
+Route::middleware(['auth', 'verified'])->group(function () {
+    Route::get('/dashboard', function () {
+        return Inertia::render('Dashboard');
+    })->name('dashboard');
+
+    Route::resource('/availability-status', AvailabilityStatusController::class);
+    Route::resource('/resource-type', ResourceTypeController::class);
+    Route::resource('/booking-status', BookingStatusController::class);
 
 
-Route::get('/dashboard', function () {
-    return Inertia::render('Dashboard');
-})->middleware(['auth', 'verified'])->name('dashboard');
+});
+
+
+
 
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
