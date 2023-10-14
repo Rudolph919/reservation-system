@@ -1,14 +1,19 @@
 <?php
 
-use App\Http\Controllers\AvailabilityStatusController;
-use App\Http\Controllers\BookingController;
-use App\Http\Controllers\BookingStatusController;
-use App\Http\Controllers\LandingPageController;
-use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ResourceTypeController;
-use Illuminate\Foundation\Application;
-use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+use App\Models\Booking;
+use App\Models\Resource;
+use App\Models\ResourceType;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Foundation\Application;
+use App\Http\Controllers\AddOnController;
+use App\Http\Controllers\BookingController;
+use App\Http\Controllers\ProfileController;
+use App\Http\Controllers\ResourceController;
+use App\Http\Controllers\LandingPageController;
+use App\Http\Controllers\ResourceTypeController;
+use App\Http\Controllers\BookingStatusController;
+use App\Http\Controllers\AvailabilityStatusController;
 
 
 
@@ -39,14 +44,26 @@ Route::get('/contact', [LandingPageController::class, 'contact'])->name('contact
 
 
 
+
+
 Route::middleware(['auth', 'verified'])->group(function () {
+
     Route::get('/dashboard', function () {
-        return Inertia::render('Dashboard');
+        return Inertia::render('Dashboard',[
+            'bookingCount' => Booking::count(),
+            'resourceCount' => Resource::count(),
+        ]);
     })->name('dashboard');
 
     Route::resource('/availability-status', AvailabilityStatusController::class);
     Route::resource('/resource-type', ResourceTypeController::class);
     Route::resource('/booking-status', BookingStatusController::class);
+    Route::resource('/add-on', AddOnController::class);
+    Route::resource('/resource', ResourceController::class);
+    Route::resource('/booking', BookingController::class);
+    Route::get('/booking/search', [BookingController::class, 'search'])->name('booking.search');
+    Route::post('/booking/searchBookings', [BookingController::class, 'searchBookings'])->name('booking.searchBookings');
+
 
 
 });
