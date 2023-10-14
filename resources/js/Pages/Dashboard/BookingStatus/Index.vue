@@ -3,10 +3,9 @@ import DangerButton from "@/Components/DangerButton.vue";
 import NotificationSuccess from "@/Components/NotificationSuccess.vue";
 import Pagination from "@/Components/Pagination.vue";
 import PrimaryNavLink from "@/Components/PrimaryNavLink.vue";
-import SecondaryButton from "@/Components/SecondaryButton.vue";
 import SecondaryNavLink from "@/Components/SecondaryNavLink.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { Head, Link, router } from "@inertiajs/vue3";
+import { Head, router } from "@inertiajs/vue3";
 
 defineProps({
     title: {
