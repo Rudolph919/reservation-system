@@ -2,7 +2,7 @@
 
 namespace Database\Seeders;
 
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
+use App\Models\Booking;
 use Illuminate\Database\Seeder;
 
 class BookingSeeder extends Seeder
@@ -12,6 +12,6 @@ class BookingSeeder extends Seeder
      */
     public function run(): void
     {
-        //
+        Booking::factory()->count(60)->create();
     }
 }
