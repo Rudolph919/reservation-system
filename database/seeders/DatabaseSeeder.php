@@ -17,6 +17,9 @@ class DatabaseSeeder extends Seeder
             ResourceTypeSeeder::class,
             BookingStatusSeeder::class,
             AvailabilityStatusSeeder::class,
+            AddOnSeeder::class,
+            ResourceSeeder::class,
+            BookingSeeder::class,
         ]);
     }
 }
