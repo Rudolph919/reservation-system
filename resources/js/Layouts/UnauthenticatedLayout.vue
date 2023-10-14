@@ -24,14 +24,14 @@ const showingNavigationDropdown = ref(false);
                     </div>
 
                     <div class="flex items-center">
-                        <NavLink :href="route('home')" :active="route().current('home')" class="m-4 italic text-xl">
+                        <NavLink :href="route('home')" :active="route().current('home')" class="m-4 italic text-xl text-white">
                             Home
                         </NavLink>
-                        <NavLink :href="route('about')" :active="route().current('about')" class="m-4 italic text-xl">
-                            About
+                        <NavLink :href="route('about')" :active="route().current('about')" class="m-4 italic text-xl text-white text-white">
+                            About Us
                         </NavLink>
-                        <NavLink :href="route('contact')" :active="route().current('contact')" class="m-4 italic text-xl">
-                            Contact
+                        <NavLink :href="route('contact')" :active="route().current('contact')" class="m-4 italic text-xl text-white">
+                            Contact Us
                         </NavLink>
                     </div>
 
