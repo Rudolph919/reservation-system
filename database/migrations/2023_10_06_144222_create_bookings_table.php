@@ -21,7 +21,8 @@ return new class extends Migration
             $table->string('guest_email');
             $table->string('guest_phone');
             $table->integer('guest_count');
-            $table->integer('booking_status_id')->default(1);
+            $table->unsignedBigInteger('booking_status_id')->default(1);
+            $table->foreign('booking_status_id')->references('id')->on('booking_statuses');
             $table->decimal('total_price', 10, 2);
             $table->timestamps();
         });

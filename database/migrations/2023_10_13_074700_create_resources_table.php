@@ -15,7 +15,8 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->string('description');
-            $table->integer('resource_type_id');
+            $table->unsignedBigInteger('resource_type_id');
+            $table->foreign('resource_type_id')->references('id')->on('resource_types');
             $table->integer('capacity');
             $table->string('price');
             $table->string('location');
