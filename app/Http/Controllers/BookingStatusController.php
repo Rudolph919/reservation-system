@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\BookingStatusRequest;
 use Inertia\Inertia;
-use Illuminate\Http\Request;
 use App\Models\BookingStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

@@ -6,7 +6,6 @@ use App\Http\Requests\StoreBookingRequest;
 use Inertia\Inertia;
 use App\Models\Booking;
 use App\Models\Resource;
-use App\Models\ResourceType;
 use Illuminate\Http\Request;
 use App\Models\BookingStatus;
 use Illuminate\Support\Facades\DB;

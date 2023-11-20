@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\AvailabilityStatusRequest;
 use Inertia\Inertia;
 use Inertia\Response;
-use Illuminate\Http\Request;
 use App\Models\AvailabilityStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;

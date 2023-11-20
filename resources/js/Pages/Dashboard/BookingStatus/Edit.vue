@@ -1,20 +1,20 @@
 <script setup>
-import InputError from '@/Components/InputError.vue';
-import NotificationError from '@/Components/NotificationError.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import PrimaryNavLink from '@/Components/PrimaryNavLink.vue';
-import TextInput from '@/Components/TextInput.vue';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, Link, useForm } from '@inertiajs/vue3';
+import InputError from "@/Components/InputError.vue";
+import NotificationError from "@/Components/NotificationError.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryNavLink from "@/Components/PrimaryNavLink.vue";
+import TextInput from "@/Components/TextInput.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head, useForm } from "@inertiajs/vue3";
 
 const props = defineProps({
     bookingStatus: Object,
     title: String,
-    error: String
+    error: String,
 });
 
 const form = useForm({
-    'bookingStatus': props.bookingStatus.name,
+    bookingStatus: props.bookingStatus.name,
 });
 </script>
 
@@ -28,7 +28,9 @@ const form = useForm({
 
         <div class="py-8">
             <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+                <div
+                    class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6"
+                >
                     <div class="flex justify-between pb-4">
                         <div>
                             <h2
@@ -45,9 +47,23 @@ const form = useForm({
                             </PrimaryNavLink>
                         </div>
                     </div>
-                    <form @submit.prevent="form.patch(route('booking-status.update', bookingStatus.id))">
-                        <TextInput name="bookingStatus" v-model="form.bookingStatus" type="text" class="mt-1 block w-full"/>
-                        <InputError class="mt-2" :message="form.errors.bookingStatus" />
+                    <form
+                        @submit.prevent="
+                            form.patch(
+                                route('booking-status.update', bookingStatus.id)
+                            )
+                        "
+                    >
+                        <TextInput
+                            name="bookingStatus"
+                            v-model="form.bookingStatus"
+                            type="text"
+                            class="mt-1 block w-full"
+                        />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.bookingStatus"
+                        />
                         <PrimaryButton class="mt-4">Update</PrimaryButton>
                     </form>
                 </div>

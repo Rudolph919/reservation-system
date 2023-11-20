@@ -1,12 +1,10 @@
 <script setup>
 import PrimaryNavLink from "@/Components/PrimaryNavLink.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
-import { computed } from "vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
 import TextInput from "@/Components/TextInput.vue";
 import InputError from "@/Components/InputError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
-import { ref } from "vue";
 import NotificationError from "@/Components/NotificationError.vue";
 
 const props = defineProps({

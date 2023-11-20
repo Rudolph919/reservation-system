@@ -7,7 +7,6 @@ use Faker\Factory as FakerFactory;
 use Inertia\Inertia;
 use App\Models\Resource;
 use App\Models\ResourceType;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 

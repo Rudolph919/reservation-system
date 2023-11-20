@@ -6,7 +6,6 @@ import PrimaryNavLink from "@/Components/PrimaryNavLink.vue";
 import TextInput from "@/Components/TextInput.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, useForm } from "@inertiajs/vue3";
-import { ref } from "vue";
 
 defineProps({
     title: {

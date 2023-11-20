@@ -4,10 +4,8 @@ import NotificationError from "@/Components/NotificationError.vue";
 import PrimaryButton from "@/Components/PrimaryButton.vue";
 import PrimaryNavLink from "@/Components/PrimaryNavLink.vue";
 import TextInput from "@/Components/TextInput.vue";
-import SelectInput from "@/Components/SelectInput.vue";
 import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, Link, useForm } from "@inertiajs/vue3";
-import { ref } from "vue";
 
 defineProps({
     title: {

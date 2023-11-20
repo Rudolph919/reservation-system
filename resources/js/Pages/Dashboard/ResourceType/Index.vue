@@ -20,10 +20,10 @@ defineProps({
 });
 
 const destroy = (id) => {
-    if(confirm("Are you sure you want to delete this resource type?")) {
-        router.visit(route('resource-type.destroy', id), {method: 'delete'})
+    if (confirm("Are you sure you want to delete this resource type?")) {
+        router.visit(route("resource-type.destroy", id), { method: "delete" });
     }
-}
+};
 </script>
 
 <template>

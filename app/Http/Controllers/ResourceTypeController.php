@@ -6,7 +6,6 @@ use App\Http\Requests\ResourceTypeRequest;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\ResourceType;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
