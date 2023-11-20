@@ -2,95 +2,60 @@
 
 namespace App\Http\Controllers;
 
-use App\Models\BookingStatus;
+use App\Http\Requests\StoreBookingRequest;
 use Inertia\Inertia;
 use App\Models\Booking;
 use App\Models\Resource;
 use App\Models\ResourceType;
 use Illuminate\Http\Request;
+use App\Models\BookingStatus;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 
 class BookingController extends Controller
 {
-    public function search()
+    public function index(Request $request)
     {
-        return Inertia::render('BookingPage', [
-            'title' => 'Booking',
-            'resourceTypes' => ResourceType::all(),
-        ]);
-    }
+        $search = $request->input('search', '');
+        $bookingStatusId = $request->input('bookingStatusId', '');
+        $checkInDate = $request->input('checkInDate', '');
+        $checkOutDate = $request->input('checkOutDate', '');
 
-    public function searchBookings(Request $request)
-    {
-        $searchCriteria = $request->form;
+        $query = Booking::with('bookingStatus')->orderBy('check_in_date', 'asc');
 
-        if (!empty($searchCriteria['checkInDate'])) {
-            $checkInDate = $searchCriteria['checkInDate'];
-        } else {
-            $checkInDate = '';
+        if ($request->filled('search')) {
+            $search = $request->input('search');
+            $query->where('guest_name', 'LIKE', "%{$search}%");
         }
 
-        $checkOutDate = $searchCriteria['checkOutDate'] ?? null;
-        $selectedResourceType = $searchCriteria['selectedResourceType'] ?? null;
-
-        if (isset($checkInDate) && isset($checkOutDate) && $checkInDate > $checkOutDate) {
-            return Inertia::render('BookingPage', [
-                'error' => 'Check-in date must be before check-out date',
-            ]);
+        if ($request->filled('bookingStatusId')) {
+            $bookingStatusId = $request->input('bookingStatusId');
+            $query->where('booking_status_id', $bookingStatusId);
         }
 
-        if (
-            (empty($checkInDate) && empty($checkOutDate)) || // Both dates are null
-            (!empty($checkInDate) && !empty($checkOutDate))    // Both dates have values
-        ) {
-
-            $filteredBookings = Booking::with('resource')
-                ->where(function ($query) use ($checkInDate, $checkOutDate, $selectedResourceType) {
-                    // Check-in Date
-                    if ($checkInDate) {
-                        $query->where('check_in_date', '>=', $checkInDate);
-                    }
-
-                    // Check-out Date
-                    if ($checkOutDate) {
-                        $query->where('check_out_date', '<=', $checkOutDate);
-                    }
-
-                    // Resource Type
-                    if ($selectedResourceType) {
-                        $query->whereHas('resource', function ($resourceQuery) use ($selectedResourceType) {
-                            $resourceQuery->where('resource_type_id', $selectedResourceType);
-                        });
-                    }
-                })->paginate(10);
-
-            return Inertia::render('BookingPage', [
-                'filteredBookings' => $filteredBookings,
-                'resourceTypes' => ResourceType::all(),
-            ]);//
-
-
-        } else {
-            return Inertia::render('BookingPage', [
-                'error' => 'Both check-in and check-out dates must be either null or have values',
-                'resourceTypes' => ResourceType::all(),
-            ]);// Dates are not valid
+        if ($request->filled('checkInDate') && $request->filled('checkOutDate')) {
+            $checkInDate = $request->input('checkInDate');
+            $checkOutDate = $request->input('checkOutDate');
+            $query->whereBetween('booking_date', [$checkInDate, $checkOutDate]);
         }
-    }
 
-    public function index()
-    {
-        $data = Booking::with('bookingStatus')->orderBy('check_in_date', 'asc')->paginate(20);
+        $data = $query->paginate(10);
+        $bookingStatus = BookingStatus::all();
+
         return Inertia::render('Dashboard/Booking/Index', [
             'title' => 'Booking',
-            'data' => $data
+            'data' => $data,
+            'bookingStatus' => $bookingStatus,
+            'search' => $search,
+            'bookingStatusId' => $bookingStatusId,
+            'checkInDate' => $checkInDate,
+            'checkOutDate' => $checkOutDate,
         ]);
     }
 
     public function show(Booking $booking)
     {
-        $booking->load('resource');
+        $booking->load(['bookingStatus', 'resource']);
 
         return Inertia::render('Dashboard/Booking/Show', [
             'title' => 'Booking',
@@ -109,19 +74,8 @@ class BookingController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreBookingRequest $request)
     {
-
-        $validated = $request->validate([
-            'checkInDate' => 'required|date',
-            'checkOutDate' => 'required|date',
-            'resourceId' => 'required|exists:resources,id',
-            'guestName' => 'required|max:255',
-            'guestEmail' => 'required|email|max:255',
-            'guestPhone' => 'required|max:255',
-            'guestCount' => 'required|numeric|min:1',
-        ]);
-
         $booking = new Booking();
         $booking->check_in_date = $request->checkInDate;
         $booking->check_out_date = $request->checkOutDate;
@@ -177,13 +131,14 @@ class BookingController extends Controller
         $booking->delete();
 
         $data = Booking::with('bookingStatus')->orderBy('check_in_date', 'asc')->paginate(20);
-        return Inertia::render('Dashboard/Booking/Index', [
+
+        $dataArray = [
             'title' => 'Booking',
             'data' => $data,
             'success' => 'Booking deleted successfully',
-        ]);
+        ];
+
+        return redirect()->route('booking.index')->with($dataArray);
     }
 
-
 }
-

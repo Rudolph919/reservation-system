@@ -8,9 +8,9 @@ const props = defineProps({
 
 <template>
     <div class="flex">
-        <div class="bg-white shadow-lg rounded-lg p-4 m-2 w-96">
+        <div class="p-4 m-2 bg-white rounded-lg shadow-lg w-96">
             <!-- Booking Title -->
-            <div class="text-xl font-semibold mb-2">
+            <div class="mb-2 text-xl font-semibold">
                 {{ booking.guest_name }}
             </div>
 
@@ -23,7 +23,9 @@ const props = defineProps({
             <!-- Booking Status -->
             <div class="flex justify-between mb-2">
                 <div class="text-gray-600">Booking Status:</div>
-                <div class="text-gray-900">{{ booking.bookingStatus.name }}</div>
+                <div class="text-gray-900">
+                    {{ booking.booking_status.name }}
+                </div>
             </div>
 
             <!-- Check-in and Check-out Dates -->

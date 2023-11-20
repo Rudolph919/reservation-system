@@ -11,7 +11,7 @@ class UpdateBookingRequest extends FormRequest
      */
     public function authorize(): bool
     {
-        return false;
+        return true;
     }
 
     /**
@@ -22,7 +22,13 @@ class UpdateBookingRequest extends FormRequest
     public function rules(): array
     {
         return [
-            //
+            'checkInDate' => 'required|date',
+            'checkOutDate' => 'required|date',
+            'resourceId' => 'required|exists:resources,id',
+            'guestName' => 'required|max:255',
+            'guestEmail' => 'required|email|max:255',
+            'guestPhone' => 'required|max:255',
+            'guestCount' => 'required|numeric|min:1',
         ];
     }
 }
