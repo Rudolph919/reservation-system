@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ResourceRequest;
 use Faker\Factory as FakerFactory;
 use Inertia\Inertia;
 use App\Models\Resource;
@@ -17,7 +18,7 @@ class ResourceController extends Controller
      */
     public function index()
     {
-        $data = Resource::with('resourceType')->orderBy('name', 'asc')->paginate(20);
+        $data = Resource::with('resourceType')->orderBy('name', 'asc')->paginate(10);
         return Inertia::render('Dashboard/Resource/Index', [
             'title' => 'Resources',
             'data' => $data,
@@ -38,22 +39,12 @@ class ResourceController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(ResourceRequest $request)
     {
-
-        $validated = $request->validate([
-            'resource' => 'required|max:255',
-            'description' => 'required|max:255',
-            'resourceTypeId' => 'required|exists:resource_types,id',
-            'capacity' => 'required|numeric',
-            'price' => 'required|max:255',
-            'location' => 'required|max:255',
-            // 'image' => 'nullable',
-        ]);
-
+        //TODO: Need to remove this when image uploads have been completed
         $faker = FakerFactory::create();
 
-        $resource  = new Resource();
+        $resource = new Resource();
         $resource->name = $request->resource;
         $resource->description = $request->description;
         $resource->resource_type_id = $request->resourceTypeId;
@@ -74,7 +65,7 @@ class ResourceController extends Controller
             ]);
         }
 
-        $data = Resource::with('resourceType')->orderBy('name', 'asc')->paginate(20);
+        $data = Resource::with('resourceType')->orderBy('name', 'asc')->paginate(10);
         return Inertia::render('Dashboard/Resource/Index', [
             'title' => 'Resource',
             'data' => $data,
@@ -105,14 +96,8 @@ class ResourceController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Resource $resource)
+    public function update(ResourceRequest $request, Resource $resource)
     {
-        $validated = $request->validate([
-            'addOn' => 'required|max:255',
-            'description' => 'required|max:255',
-            'price' => 'required|max:255',
-        ]);
-
         $resource->name = $request->resource;
         $resource->description = $request->description;
         $resource->resource_type_id = $request->resourceTypeId;
@@ -129,6 +114,7 @@ class ResourceController extends Controller
             return Inertia::render('Dashboard/Resource/Edit', [
                 'title' => 'Edit Resource',
                 'error' => 'Error occurred while updating the add-on. Please try again later.',
+                'resourceTypes' => ResourceType::all(),
             ]);
         }
 
@@ -147,11 +133,14 @@ class ResourceController extends Controller
     {
         $resource->delete();
 
-        $data = Resource::with('resourceType')->orderBy('name', 'asc')->paginate(20);
-        return Inertia::render('Dashboard/Resource/Index', [
+        $data = Resource::with('resourceType')->orderBy('name', 'asc')->paginate(10);
+
+        $dataArray = [
             'title' => 'Resource',
             'data' => $data,
             'success' => 'Resource deleted successfully',
-        ]);
+        ];
+
+        return redirect()->route('resource.index')->with($dataArray);
     }
 }
