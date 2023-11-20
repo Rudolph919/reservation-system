@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AddOnRequest;
 use Inertia\Inertia;
-use Illuminate\Http\Request;
 use App\Models\AddOn;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
@@ -15,7 +15,7 @@ class AddOnController extends Controller
      */
     public function index()
     {
-        $data = AddOn::orderBy('name', 'asc')->paginate(2);
+        $data = AddOn::orderBy('name', 'asc')->paginate(10);
         return Inertia::render('Dashboard/AddOn/Index', [
             'title' => 'Add-Ons',
             'data' => $data,
@@ -35,14 +35,8 @@ class AddOnController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(AddOnRequest $request)
     {
-        $validated = $request->validate([
-            'addOn' => 'required|max:255',
-            'description' => 'required|max:255',
-            'price' => 'required|max:255',
-        ]);
-
         $addOn  = new AddOn();
         $addOn->name = $request->addOn;
         $addOn->description = $request->description;
@@ -60,7 +54,7 @@ class AddOnController extends Controller
             ]);
         }
 
-        $data = AddOn::orderBy('name', 'asc')->paginate(2);
+        $data = AddOn::orderBy('name', 'asc')->paginate(10);
         return Inertia::render('Dashboard/AddOn/Index', [
             'title' => 'Add-On',
             'data' => $data,
@@ -82,14 +76,8 @@ class AddOnController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, AddOn $addOn)
+    public function update(AddOnRequest $request, AddOn $addOn)
     {
-        $validated = $request->validate([
-            'addOn' => 'required|max:255',
-            'description' => 'required|max:255',
-            'price' => 'required|max:255',
-        ]);
-
         $addOn->name = $request->addOn;
         $addOn->description = $request->description;
         $addOn->price = $request->price;
@@ -106,7 +94,7 @@ class AddOnController extends Controller
             ]);
         }
 
-        $data = AddOn::orderBy('name', 'asc')->paginate(2);
+        $data = AddOn::orderBy('name', 'asc')->paginate(10);
         return Inertia::render('Dashboard/AddOn/Index', [
             'title' => 'Add-On',
             'data' => $data,
@@ -121,11 +109,14 @@ class AddOnController extends Controller
     {
         $addOn->delete();
 
-        $data = AddOn::orderBy('name', 'asc')->paginate(2);
-        return Inertia::render('Dashboard/AddOn/Index', [
+        $data = AddOn::orderBy('name', 'asc')->paginate(10);
+
+        $dataArray = [
             'title' => 'Add-On',
             'data' => $data,
             'success' => 'Add-on deleted successfully',
-        ]);
+        ];
+
+        return redirect()->route('add-on.index')->with($dataArray);
     }
 }
