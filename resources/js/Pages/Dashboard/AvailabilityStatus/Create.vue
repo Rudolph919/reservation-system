@@ -1,11 +1,11 @@
 <script setup>
-import InputError from '@/Components/InputError.vue';
-import NotificationError from '@/Components/NotificationError.vue';
-import PrimaryButton from '@/Components/PrimaryButton.vue';
-import PrimaryNavLink from '@/Components/PrimaryNavLink.vue';
-import TextInput from '@/Components/TextInput.vue';
-import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-import { Head, useForm } from '@inertiajs/vue3';
+import InputError from "@/Components/InputError.vue";
+import NotificationError from "@/Components/NotificationError.vue";
+import PrimaryButton from "@/Components/PrimaryButton.vue";
+import PrimaryNavLink from "@/Components/PrimaryNavLink.vue";
+import TextInput from "@/Components/TextInput.vue";
+import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
+import { Head, useForm } from "@inertiajs/vue3";
 
 defineProps({
     title: {
@@ -17,7 +17,7 @@ defineProps({
 });
 
 const form = useForm({
-    availabilityStatus: '',
+    availabilityStatus: "",
 });
 </script>
 
@@ -30,12 +30,14 @@ const form = useForm({
         </div>
 
         <div class="py-8">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
-                <div class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
+                <div
+                    class="p-6 overflow-hidden bg-white shadow-sm sm:rounded-lg"
+                >
                     <div class="flex justify-between pb-4">
                         <div>
                             <h2
-                                class="inline-flex items-center justify-center font-semibold text-xl text-gray-800 leading-tight"
+                                class="inline-flex items-center justify-center text-xl font-semibold leading-tight text-gray-800"
                             >
                                 Availability Status - Create
                             </h2>
@@ -49,12 +51,26 @@ const form = useForm({
                         </div>
                     </div>
 
-                    <form @submit.prevent="form.post(route('availability-status.store'), { onSuccess: () => form.reset() })">
-                        <TextInput id="availabilityStatus" v-model="form.availabilityStatus" type="text" class="mt-1 block w-full"/>
-                        <InputError class="mt-2" :message="form.errors.availabilityStatus" />
+                    <form
+                        @submit.prevent="
+                            form.post(route('availability-status.store'), {
+                                onSuccess: () => form.reset(),
+                            })
+                        "
+                    >
+                        <TextInput
+                            id="availabilityStatus"
+                            v-model="form.availabilityStatus"
+                            type="text"
+                            class="block w-full mt-1"
+                            autofocus
+                        />
+                        <InputError
+                            class="mt-2"
+                            :message="form.errors.availabilityStatus"
+                        />
                         <PrimaryButton class="mt-4">Create</PrimaryButton>
                     </form>
-
                 </div>
             </div>
         </div>

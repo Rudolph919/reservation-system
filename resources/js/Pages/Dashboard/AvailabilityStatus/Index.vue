@@ -5,6 +5,7 @@ import AuthenticatedLayout from "@/Layouts/AuthenticatedLayout.vue";
 import { Head, router } from "@inertiajs/vue3";
 import NotificationSuccess from "@/Components/NotificationSuccess.vue";
 import DangerButton from "@/Components/DangerButton.vue";
+import Pagination from "@/Components/Pagination.vue";
 
 defineProps({
     title: {
@@ -19,11 +20,10 @@ defineProps({
 });
 
 const destroy = (id) => {
-    if(confirm("Are you sure you want to delete this availability status?")) {
-        router.visit(route('availability-status.destroy', id), {method: 'delete'})
-    }
-}
-
+    router.delete(route("availability-status.destroy", id), {
+        onBefore: () => confirm("Are you sure you want to delete this user?"),
+    });
+};
 </script>
 
 <template>
@@ -35,14 +35,14 @@ const destroy = (id) => {
         </div>
 
         <div class="py-8">
-            <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
+            <div class="mx-auto max-w-7xl sm:px-6 lg:px-8">
                 <div
-                    class="bg-white overflow-hidden shadow-sm sm:rounded-lg p-6"
+                    class="p-6 overflow-hidden bg-white shadow-sm sm:rounded-lg"
                 >
                     <div class="flex justify-between pb-4">
                         <div>
                             <h2
-                                class="inline-flex items-center justify-center font-semibold text-xl text-gray-800 leading-tight"
+                                class="inline-flex items-center justify-center text-xl font-semibold leading-tight text-gray-800"
                             >
                                 Availability Status - Index
                             </h2>
@@ -71,7 +71,7 @@ const destroy = (id) => {
                         </thead>
                         <tbody>
                             <tr
-                                v-for="row in data"
+                                v-for="row in data.data"
                                 :key="row.id"
                                 class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-600"
                             >
@@ -83,7 +83,11 @@ const destroy = (id) => {
                                 </th>
                                 <td class="px-6 py-4">
                                     <SecondaryNavLink
-                                        :href="route('availability-status.edit', [row,])"
+                                        :href="
+                                            route('availability-status.edit', [
+                                                row,
+                                            ])
+                                        "
                                         class="mr-4"
                                     >
                                         Edit
@@ -95,6 +99,7 @@ const destroy = (id) => {
                             </tr>
                         </tbody>
                     </table>
+                    <Pagination class="mt-6" :links="data.links" />
                 </div>
             </div>
         </div>

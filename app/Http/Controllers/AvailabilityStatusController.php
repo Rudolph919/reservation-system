@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AvailabilityStatusRequest;
 use Inertia\Inertia;
 use Inertia\Response;
 use Illuminate\Http\Request;
@@ -17,7 +18,7 @@ class AvailabilityStatusController extends Controller
      */
     public function index()
     {
-        $data = AvailabilityStatus::all();
+        $data = AvailabilityStatus::orderBy('name', 'asc')->paginate(10);
         return Inertia::render('Dashboard/AvailabilityStatus/Index', [
             'title' => 'Availability Status',
             'data' => $data,
@@ -37,12 +38,8 @@ class AvailabilityStatusController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): Response
+    public function store(AvailabilityStatusRequest $request): Response
     {
-        $validated = $request->validate([
-            'availabilityStatus' => 'required|max:255'
-        ]);
-
         $availabilityStatus = new AvailabilityStatus();
         $availabilityStatus->name = $request->availabilityStatus;
 
@@ -58,9 +55,11 @@ class AvailabilityStatusController extends Controller
             ]);
         }
 
+        $data = AvailabilityStatus::orderBy('name', 'asc')->paginate(10);
+
         return Inertia::render('Dashboard/AvailabilityStatus/Index', [
             'title' => 'Availability Status',
-            'data' => AvailabilityStatus::all(),
+            'data' => $data,
             'success' => 'Availability Status created successfully',
         ]);
     }
@@ -81,12 +80,8 @@ class AvailabilityStatusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(AvailabilityStatusRequest $request, string $id)
     {
-        $validated = $request->validate([
-            'availabilityStatus' => 'required|max:255'
-        ]);
-
         $availabilityStatus = AvailabilityStatus::find($id);
         $availabilityStatus->name = $request->availabilityStatus;
 
@@ -102,9 +97,10 @@ class AvailabilityStatusController extends Controller
             ]);
         }
 
+        $data = AvailabilityStatus::orderBy('name', 'asc')->paginate(10);
         return Inertia::render('Dashboard/AvailabilityStatus/Index', [
             'title' => 'Availability Status',
-            'data' => AvailabilityStatus::all(),
+            'data' => $data,
             'success' => 'Availability Status updated successfully',
         ]);
     }
@@ -112,14 +108,18 @@ class AvailabilityStatusController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(AvailabilityStatus $availabilityStatus)
+    public function destroy(AvailabilityStatus $availabilityStatus): RedirectResponse
     {
         $availabilityStatus->delete();
 
-        return Inertia::render('Dashboard/AvailabilityStatus/Index', [
+        $data = AvailabilityStatus::orderBy('name', 'asc')->paginate(10);
+
+        $dataArray = [
             'title' => 'Availability Status',
-            'data' => AvailabilityStatus::all(),
+            'data' => $data,
             'success' => 'Availability Status deleted successfully',
-        ]);
+        ];
+
+        return redirect()->route('availability-status.index')->with($dataArray);
     }
 }
