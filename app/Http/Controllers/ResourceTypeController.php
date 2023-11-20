@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\ResourceTypeRequest;
 use Inertia\Inertia;
 use Inertia\Response;
 use App\Models\ResourceType;
@@ -16,7 +17,7 @@ class ResourceTypeController extends Controller
      */
     public function index()
     {
-        $data = ResourceType::orderBy('name', 'asc')->paginate(2);
+        $data = ResourceType::orderBy('name', 'asc')->paginate(10);
         return Inertia::render('Dashboard/ResourceType/Index', [
             'title' => 'Resource Type',
             'data' => $data,
@@ -36,12 +37,8 @@ class ResourceTypeController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request): Response
+    public function store(ResourceTypeRequest $request): Response
     {
-        $validated = $request->validate([
-            'resourceType' => 'required|max:255'
-        ]);
-
         $resourceType  = new ResourceType();
         $resourceType->name = $request->resourceType;
 
@@ -57,7 +54,7 @@ class ResourceTypeController extends Controller
             ]);
         }
 
-        $data = ResourceType::orderBy('name', 'asc')->paginate(2);
+        $data = ResourceType::orderBy('name', 'asc')->paginate(10);
         return Inertia::render('Dashboard/ResourceType/Index', [
             'title' => 'Resource Type',
             'data' => $data,
@@ -79,12 +76,8 @@ class ResourceTypeController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(ResourceTypeRequest $request, string $id)
     {
-        $validated = $request->validate([
-            'resourceType' => 'required|max:255'
-        ]);
-
         $resourceType = ResourceType::find($id);
         $resourceType->name = $request->resourceType;
 
@@ -100,7 +93,7 @@ class ResourceTypeController extends Controller
             ]);
         }
 
-        $data = ResourceType::orderBy('name', 'asc')->paginate(2);
+        $data = ResourceType::orderBy('name', 'asc')->paginate(10);
         return Inertia::render('Dashboard/ResourceType/Index', [
             'title' => 'Resource Type',
             'data' => $data,
@@ -115,11 +108,14 @@ class ResourceTypeController extends Controller
     {
         $resourceType->delete();
 
-        $data = ResourceType::orderBy('name', 'asc')->paginate(2);
-        return Inertia::render('Dashboard/ResourceType/Index', [
+        $data = ResourceType::orderBy('name', 'asc')->paginate(10);
+
+        $dataArray = [
             'title' => 'Resource Type',
             'data' => $data,
             'success' => 'Resource type deleted successfully',
-        ]);
+        ];
+
+        return redirect()->route('resource-type.index')->with($dataArray);
     }
 }
