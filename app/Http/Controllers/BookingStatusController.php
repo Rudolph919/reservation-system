@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\BookingStatusRequest;
 use Inertia\Inertia;
 use Illuminate\Http\Request;
 use App\Models\BookingStatus;
@@ -15,7 +16,7 @@ class BookingStatusController extends Controller
      */
     public function index()
     {
-        $data = BookingStatus::orderBy('name', 'asc')->paginate(2);
+        $data = BookingStatus::orderBy('name', 'asc')->paginate(10);
         return Inertia::render('Dashboard/BookingStatus/Index', [
             'title' => 'Booking Status',
             'data' => $data,
@@ -35,12 +36,8 @@ class BookingStatusController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(BookingStatusRequest $request)
     {
-        $validated = $request->validate([
-            'bookingStatus' => 'required|max:255'
-        ]);
-
         $bookingStatus  = new BookingStatus();
         $bookingStatus->name = $request->bookingStatus;
 
@@ -56,7 +53,7 @@ class BookingStatusController extends Controller
             ]);
         }
 
-        $data = BookingStatus::orderBy('name', 'asc')->paginate(2);
+        $data = BookingStatus::orderBy('name', 'asc')->paginate(10);
         return Inertia::render('Dashboard/BookingStatus/Index', [
             'title' => 'Booking Status',
             'data' => $data,
@@ -78,12 +75,8 @@ class BookingStatusController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(BookingStatusRequest $request, string $id)
     {
-        $validated = $request->validate([
-            'bookingStatus' => 'required|max:255'
-        ]);
-
         $bookingStatus = BookingStatus::find($id);
         $bookingStatus->name = $request->bookingStatus;
 
@@ -99,7 +92,7 @@ class BookingStatusController extends Controller
             ]);
         }
 
-        $data = BookingStatus::orderBy('name', 'asc')->paginate(2);
+        $data = BookingStatus::orderBy('name', 'asc')->paginate(10);
         return Inertia::render('Dashboard/BookingStatus/Index', [
             'title' => 'Booking Status',
             'data' => $data,
@@ -114,11 +107,14 @@ class BookingStatusController extends Controller
     {
         $bookingStatus->delete();
 
-        $data = BookingStatus::orderBy('name', 'asc')->paginate(2);
-        return Inertia::render('Dashboard/BookingStatus/Index', [
+        $data = BookingStatus::orderBy('name', 'asc')->paginate(10);
+
+        $dataArray = [
             'title' => 'Booking Status',
             'data' => $data,
             'success' => 'Booking Status deleted successfully',
-        ]);
+        ];
+
+        return redirect()->route('booking-status.index', $dataArray);
     }
 }
